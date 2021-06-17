@@ -28,6 +28,24 @@ class PackageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        /**
+         * PM function md5($plain)
+         * 
+         * Usage:
+         * 
+         * Into an exclusive gateway outgoing flow:
+         *      /\
+         *     /  \---outgoing_flow--->
+         *     \  /
+         *      \/
+         *  Expression: true
+         *  Variable Name: form_output_1
+         *  Value: md5(form_input_1)
+         * 
+         * Results:
+         *  form_input_1 = sample
+         *  form_output_1 = 5e8ff9bf55ba3508199d22e984129be6
+         */
         app('workflow.FormalExpression')->registerPMFunction(
             'md5',
             function ($requestData, $plain) {
