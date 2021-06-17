@@ -1,11 +1,7 @@
 <?php
 namespace ProcessMaker\Package\Extended_pm_functions;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use ProcessMaker\Package\Packages\Events\PackageEvent;
-use ProcessMaker\Package\Extended_pm_functions\Http\Middleware\AddToMenus;
-use ProcessMaker\Package\Extended_pm_functions\Listeners\PackageListener;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -32,31 +28,11 @@ class PackageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
-            require(__DIR__ . '/../routes/console.php');
-        } else {
-            // Assigning to the web middleware will ensure all other middleware assigned to 'web'
-            // will execute. If you wish to extend the user interface, you'll use the web middleware
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(__DIR__ . '/../routes/web.php');
-
-
-            Route::middleware('api')
-                ->namespace($this->namespace)
-                ->prefix('api/1.0')
-                ->group(__DIR__ . '/../routes/api.php');
-
-            Route::pushMiddlewareToGroup('web', AddToMenus::class);
-        }
-
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/', 'extended_pm_functions');
-
-        $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/processmaker/packages/extended_pm_functions'),
-        ], 'extended_pm_functions');
-
-        $this->app['events']->listen(PackageEvent::class, PackageListener::class);
-
+        app('workflow.FormalExpression')->registerPMFunction(
+            'md5',
+            function ($requestData, $plain) {
+                return md5($plain);
+            }
+        );
     }
 }
