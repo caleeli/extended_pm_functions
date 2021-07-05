@@ -2,6 +2,7 @@
 namespace ProcessMaker\Package\Extended_pm_functions;
 
 use Illuminate\Support\ServiceProvider;
+use ProcessMaker\Models\Setting;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -49,9 +50,16 @@ class PackageServiceProvider extends ServiceProvider
          *  form_output_1 = 5e8ff9bf55ba3508199d22e984129be6
          */
         app('workflow.FormalExpression')->registerPMFunction(
-            'md5',
+            'prepareConfig',
             function ($requestData, $plain) {
-                return md5($plain);
+                $extended_pm_setting1 = Setting::where('key', "extended_pm_setting1")->first();
+                $extended_pm_setting1 = $extended_pm_setting1 ? $extended_pm_setting1->config : 'default';
+                return [
+                    'md5' => md5($plain),
+                    'settings' => [
+                        'setting1' => $extended_pm_setting1,
+                    ],
+                ];
             }
         );
     }
