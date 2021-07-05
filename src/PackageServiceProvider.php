@@ -28,6 +28,8 @@ class PackageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadRoutesFrom(__DIR__ . '/../routes/console.php');
+
         /**
          * PM function md5($plain)
          * 

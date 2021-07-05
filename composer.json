@@ -15,7 +15,8 @@
     },
     "autoload": {
         "psr-4": {
-            "ProcessMaker\\Package\\Extended_pm_functions\\": "src"
+            "ProcessMaker\\Package\\Extended_pm_functions\\": "src",
+            "ProcessMaker\\Package\\Extended_pm_functions\\Seeds\\": "database/seeds"
         }
     },
     "extra": {
