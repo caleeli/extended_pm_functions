@@ -2,7 +2,6 @@
 namespace ProcessMaker\Package\Extended_pm_functions;
 
 use Illuminate\Support\ServiceProvider;
-use ProcessMaker\Models\Setting;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -49,6 +48,12 @@ class PackageServiceProvider extends ServiceProvider
          *  form_input_1 = sample
          *  form_output_1 = 5e8ff9bf55ba3508199d22e984129be6
          */
+        app('workflow.FormalExpression')->registerPMFunction(
+            'md5',
+            function ($requestData, $plain) {
+                return md5($plain);
+            }
+        );
         app('workflow.FormalExpression')->registerPMFunction(
             'prepareConfig',
             function ($requestData, $plain) {
