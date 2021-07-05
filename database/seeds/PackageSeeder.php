@@ -5,6 +5,7 @@ namespace ProcessMaker\Package\Extended_pm_functions\Seeds;
 use ProcessMaker\Models\Screen;
 use ProcessMaker\Models\Script;
 use ProcessMaker\Models\Process;
+use ProcessMaker\Models\Setting;
 use ProcessMaker\Packages\Connectors\Email\EmailConfig;
 
 class PackageSeeder
@@ -66,6 +67,52 @@ class PackageSeeder
             'user_id' => \ProcessMaker\Models\User::first()->id,
         ]);
         Process::reguard();
+
+        // Instalar settings
+        // format: text, textarea, choice, boolean, object, array, checkboxes
+    
+        Setting::unguard();
+        Setting::updateOrCreate([
+            'key' => "extended_pm_setting1",
+        ], [
+            'format' => 'text',
+            'config' => '123',
+            'name' => 'Setting Uno',
+            'helper' => 'Ejemplo de setting uno',
+            'group' => 'Ellucian_Settings',
+            'hidden' => false,
+            'ui' => '{}',
+        ]);
+        Setting::updateOrCreate([
+            'key' => "extended_pm_setting2",
+        ], [
+            'format' => 'text',
+            'config' => '123',
+            'name' => 'Setting Dos',
+            'helper' => 'Ejemplo de setting dos',
+            'group' => 'Ellucian_Settings',
+            'hidden' => false,
+            'ui' => '{}',
+        ]);
+        Setting::updateOrCreate([
+            'key' => "extended_pm_setting3",
+        ], [
+            'format' => 'checkboxes',
+            'config' => null,
+            'name' => 'Groups To Import',
+            'helper' => 'Select which LDAP groups to import',
+            'group' => 'Ellucian_Settings',
+            'hidden' => false,
+            'ui' => [
+                'dynamic' => [
+                    'url' => '/users',
+                    'response' => 'data',
+                ],
+                'switches' => true,
+                'order' => 750,
+            ],
+        ]);
+        Setting::reguard();
     }
 
     public function uninstall()
@@ -74,5 +121,6 @@ class PackageSeeder
         Script::where('key', 'get_users')->delete();
         Process::where('package_key', 'sub_process')->delete();
         Process::where('package_key', 'main_process')->delete();
+        Setting::where('group', 'Ellucian_Settings')->delete();
     }
 }
